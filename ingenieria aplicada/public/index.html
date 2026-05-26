@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRPI - Sistema de Rotación Predictiva de Inventarios</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen active">
+    <div class="login-container">
+      <div class="login-box">
+        <div class="login-header">
+          <div class="logo">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h1>SRPI</h1>
+          <p>Sistema de Rotación Predictiva de Inventarios</p>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" placeholder="usuario@empresa.com" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" placeholder="********" required>
+          </div>
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" id="remember">
+              <span>Recordar sesión</span>
+            </label>
+            <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Iniciar Sesión</button>
+        </form>
+        <p class="login-footer">¿No tienes cuenta? <a href="#">Contacta al administrador</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app-container" class="hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-small">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
+        <span class="logo-text">SRPI</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-screen="dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="productos">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span>Productos</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="lotes">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+          <span>Lotes</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="ventas">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <span>Ventas</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="inventario">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span>Inventario</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="riesgo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Riesgo Caducidad</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="rotacion">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          <span>Rotación</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="pedidos">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span>Pedidos</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="reportes">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span>Reportes</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="avatar">JD</div>
+          <div class="user-details">
+            <span class="user-name">Juan Díaz</span>
+            <span class="user-role">Administrador</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="logout-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Screen -->
+      <section id="dashboard-screen" class="content-screen active">
+        <header class="content-header">
+          <h1>Dashboard</h1>
+          <p>Resumen del estado del inventario</p>
+        </header>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">156</span>
+              <span class="stat-label">Productos Totales</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">23</span>
+              <span class="stat-label">Por Caducar (7 días)</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">5</span>
+              <span class="stat-label">Riesgo Crítico</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">$45,230</span>
+              <span class="stat-label">Ventas del Mes</span>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>Alertas de Caducidad</h3>
+              <span class="badge badge-warning">23 productos</span>
+            </div>
+            <div class="card-content">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Lote</th>
+                    <th>Días Restantes</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Leche Entera 1L</td>
+                    <td>LT-2024-001</td>
+                    <td>2 días</td>
+                    <td><span class="badge badge-danger">Crítico</span></td>
+                  </tr>
+                  <tr>
+                    <td>Yogurt Natural</td>
+                    <td>YG-2024-015</td>
+                    <td>4 días</td>
+                    <td><span class="badge badge-warning">Urgente</span></td>
+                  </tr>
+                  <tr>
+                    <td>Queso Fresco</td>
+                    <td>QF-2024-008</td>
+                    <td>5 días</td>
+                    <td><span class="badge badge-warning">Urgente</span></td>
+                  </tr>
+                  <tr>
+                    <td>Pan Integral</td>
+                    <td>PN-2024-022</td>
+                    <td>6 días</td>
+                    <td><span class="badge badge-info">Pronto</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3>Productos Más Vendidos</h3>
+              <span class="badge badge-success">Este mes</span>
+            </div>
+            <div class="card-content">
+              <div class="product-list">
+                <div class="product-item">
+                  <div class="product-info">
+                    <span class="product-name">Leche Entera 1L</span>
+                    <span class="product-category">Lácteos</span>
+                  </div>
+                  <div class="product-sales">
+                    <span class="sales-value">1,234</span>
+                    <span class="sales-label">unidades</span>
+                  </div>
+                </div>
+                <div class="product-item">
+                  <div class="product-info">
+                    <span class="product-name">Pan Blanco 500g</span>
+                    <span class="product-category">Panadería</span>
+                  </div>
+                  <div class="product-sales">
+                    <span class="sales-value">987</span>
+                    <span class="sales-label">unidades</span>
+                  </div>
+                </div>
+                <div class="product-item">
+                  <div class="product-info">
+                    <span class="product-name">Yogurt Natural</span>
+                    <span class="product-category">Lácteos</span>
+                  </div>
+                  <div class="product-sales">
+                    <span class="sales-value">856</span>
+                    <span class="sales-label">unidades</span>
+                  </div>
+                </div>
+                <div class="product-item">
+                  <div class="product-info">
+                    <span class="product-name">Huevos Docena</span>
+                    <span class="product-category">Huevos</span>
+                  </div>
+                  <div class="product-sales">
+                    <span class="sales-value">743</span>
+                    <span class="sales-label">unidades</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Productos Screen -->
+      <section id="productos-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Gestión de Productos</h1>
+            <p>Registro y administración de productos</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('producto-modal')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nuevo Producto
+          </button>
+        </header>
+        <div class="card">
+          <div class="card-header">
+            <div class="search-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Buscar producto...">
+            </div>
+            <select class="select">
+              <option value="">Todas las categorías</option>
+              <option value="lacteos">Lácteos</option>
+              <option value="panaderia">Panadería</option>
+              <option value="carnes">Carnes</option>
+              <option value="frutas">Frutas y Verduras</option>
+            </select>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>PRD-001</td>
+                  <td>Leche Entera 1L</td>
+                  <td>Lácteos</td>
+                  <td>$2.50</td>
+                  <td>450 unidades</td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon danger" title="Eliminar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>PRD-002</td>
+                  <td>Yogurt Natural 200g</td>
+                  <td>Lácteos</td>
+                  <td>$1.80</td>
+                  <td>320 unidades</td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon danger" title="Eliminar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>PRD-003</td>
+                  <td>Pan Blanco 500g</td>
+                  <td>Panadería</td>
+                  <td>$1.20</td>
+                  <td>180 unidades</td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon danger" title="Eliminar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>PRD-004</td>
+                  <td>Queso Fresco 250g</td>
+                  <td>Lácteos</td>
+                  <td>$3.50</td>
+                  <td>95 unidades</td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon danger" title="Eliminar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lotes Screen -->
+      <section id="lotes-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Gestión de Lotes</h1>
+            <p>Control de lotes y fechas de caducidad</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('lote-modal')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nuevo Lote
+          </button>
+        </header>
+        <div class="card">
+          <div class="card-header">
+            <div class="search-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Buscar lote...">
+            </div>
+            <select class="select">
+              <option value="">Todos los estados</option>
+              <option value="critico">Crítico</option>
+              <option value="urgente">Urgente</option>
+              <option value="normal">Normal</option>
+            </select>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Código Lote</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>F. Ingreso</th>
+                  <th>F. Caducidad</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>LT-2024-001</td>
+                  <td>Leche Entera 1L</td>
+                  <td>150 unidades</td>
+                  <td>15/03/2024</td>
+                  <td>22/03/2024</td>
+                  <td><span class="badge badge-danger">Crítico</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Ver detalles">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>YG-2024-015</td>
+                  <td>Yogurt Natural</td>
+                  <td>80 unidades</td>
+                  <td>14/03/2024</td>
+                  <td>24/03/2024</td>
+                  <td><span class="badge badge-warning">Urgente</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Ver detalles">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>QF-2024-008</td>
+                  <td>Queso Fresco</td>
+                  <td>45 unidades</td>
+                  <td>12/03/2024</td>
+                  <td>25/03/2024</td>
+                  <td><span class="badge badge-warning">Urgente</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Ver detalles">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>PN-2024-022</td>
+                  <td>Pan Integral</td>
+                  <td>60 unidades</td>
+                  <td>18/03/2024</td>
+                  <td>30/03/2024</td>
+                  <td><span class="badge badge-success">Normal</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Ver detalles">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ventas Screen -->
+      <section id="ventas-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Registro de Ventas</h1>
+            <p>Gestión de ventas e historial</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('venta-modal')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nueva Venta
+          </button>
+        </header>
+        <div class="stats-grid stats-grid-3">
+          <div class="stat-card">
+            <div class="stat-icon green">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">$12,450</span>
+              <span class="stat-label">Ventas Hoy</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">87</span>
+              <span class="stat-label">Transacciones</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">$143</span>
+              <span class="stat-label">Promedio/Venta</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Historial de Ventas</h3>
+            <div class="header-actions">
+              <input type="date" class="input-date">
+              <button class="btn btn-outline">Exportar</button>
+            </div>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID Venta</th>
+                  <th>Fecha/Hora</th>
+                  <th>Productos</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>VNT-2024-0087</td>
+                  <td>20/03/2024 14:32</td>
+                  <td>5 productos</td>
+                  <td>$156.80</td>
+                  <td><span class="badge badge-success">Completada</span></td>
+                  <td>
+                    <button class="btn-icon" title="Ver detalle">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>VNT-2024-0086</td>
+                  <td>20/03/2024 13:15</td>
+                  <td>3 productos</td>
+                  <td>$89.50</td>
+                  <td><span class="badge badge-success">Completada</span></td>
+                  <td>
+                    <button class="btn-icon" title="Ver detalle">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>VNT-2024-0085</td>
+                  <td>20/03/2024 11:48</td>
+                  <td>8 productos</td>
+                  <td>$234.20</td>
+                  <td><span class="badge badge-success">Completada</span></td>
+                  <td>
+                    <button class="btn-icon" title="Ver detalle">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Inventario Screen -->
+      <section id="inventario-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Estado del Inventario</h1>
+            <p>Consulta del stock actual por producto</p>
+          </div>
+          <button class="btn btn-outline">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Exportar Inventario
+          </button>
+        </header>
+        <div class="card">
+          <div class="card-header">
+            <div class="search-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Buscar en inventario...">
+            </div>
+            <div class="filter-group">
+              <select class="select">
+                <option value="">Todas las categorías</option>
+                <option value="lacteos">Lácteos</option>
+                <option value="panaderia">Panadería</option>
+                <option value="carnes">Carnes</option>
+              </select>
+              <select class="select">
+                <option value="">Todos los niveles</option>
+                <option value="bajo">Stock Bajo</option>
+                <option value="normal">Stock Normal</option>
+                <option value="alto">Stock Alto</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Stock Actual</th>
+                  <th>Stock Mínimo</th>
+                  <th>Nivel</th>
+                  <th>Valor Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>PRD-001</td>
+                  <td>Leche Entera 1L</td>
+                  <td>Lácteos</td>
+                  <td>450 unidades</td>
+                  <td>100 unidades</td>
+                  <td>
+                    <div class="stock-bar">
+                      <div class="stock-fill high" style="width: 90%"></div>
+                    </div>
+                    <span class="stock-label">Alto</span>
+                  </td>
+                  <td>$1,125.00</td>
+                </tr>
+                <tr>
+                  <td>PRD-002</td>
+                  <td>Yogurt Natural 200g</td>
+                  <td>Lácteos</td>
+                  <td>320 unidades</td>
+                  <td>80 unidades</td>
+                  <td>
+                    <div class="stock-bar">
+                      <div class="stock-fill high" style="width: 80%"></div>
+                    </div>
+                    <span class="stock-label">Alto</span>
+                  </td>
+                  <td>$576.00</td>
+                </tr>
+                <tr>
+                  <td>PRD-003</td>
+                  <td>Pan Blanco 500g</td>
+                  <td>Panadería</td>
+                  <td>45 unidades</td>
+                  <td>50 unidades</td>
+                  <td>
+                    <div class="stock-bar">
+                      <div class="stock-fill low" style="width: 30%"></div>
+                    </div>
+                    <span class="stock-label warning">Bajo</span>
+                  </td>
+                  <td>$54.00</td>
+                </tr>
+                <tr>
+                  <td>PRD-004</td>
+                  <td>Queso Fresco 250g</td>
+                  <td>Lácteos</td>
+                  <td>95 unidades</td>
+                  <td>40 unidades</td>
+                  <td>
+                    <div class="stock-bar">
+                      <div class="stock-fill medium" style="width: 60%"></div>
+                    </div>
+                    <span class="stock-label">Normal</span>
+                  </td>
+                  <td>$332.50</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Riesgo Screen -->
+      <section id="riesgo-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Riesgo de Caducidad</h1>
+            <p>Índice de riesgo y productos prioritarios</p>
+          </div>
+          <button class="btn btn-primary" id="calcular-riesgo-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Calcular Índice de Riesgo
+          </button>
+        </header>
+        <div class="stats-grid stats-grid-3">
+          <div class="stat-card card-danger">
+            <div class="stat-icon red">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">5</span>
+              <span class="stat-label">Riesgo Crítico</span>
+            </div>
+          </div>
+          <div class="stat-card card-warning">
+            <div class="stat-icon orange">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">12</span>
+              <span class="stat-label">Riesgo Alto</span>
+            </div>
+          </div>
+          <div class="stat-card card-info">
+            <div class="stat-icon blue">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">18</span>
+              <span class="stat-label">Riesgo Moderado</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Productos por Índice de Riesgo</h3>
+            <div class="legend">
+              <span class="legend-item"><span class="dot danger"></span> Crítico (IR {'>'} 0.8)</span>
+              <span class="legend-item"><span class="dot warning"></span> Alto (IR 0.5-0.8)</span>
+              <span class="legend-item"><span class="dot info"></span> Moderado (IR 0.3-0.5)</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Lote</th>
+                  <th>Días Restantes</th>
+                  <th>Stock</th>
+                  <th>Vel. Venta</th>
+                  <th>Índice Riesgo</th>
+                  <th>Acción Sugerida</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-danger">
+                  <td>Leche Entera 1L</td>
+                  <td>LT-2024-001</td>
+                  <td>2 días</td>
+                  <td>150 unidades</td>
+                  <td>45 und/día</td>
+                  <td>
+                    <div class="risk-indicator danger">
+                      <span class="risk-value">0.92</span>
+                      <div class="risk-bar"><div class="risk-fill" style="width: 92%"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-danger">Descuento Urgente</span></td>
+                </tr>
+                <tr class="row-danger">
+                  <td>Yogurt Fresa</td>
+                  <td>YG-2024-018</td>
+                  <td>3 días</td>
+                  <td>85 unidades</td>
+                  <td>22 und/día</td>
+                  <td>
+                    <div class="risk-indicator danger">
+                      <span class="risk-value">0.87</span>
+                      <div class="risk-bar"><div class="risk-fill" style="width: 87%"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-danger">Descuento Urgente</span></td>
+                </tr>
+                <tr class="row-warning">
+                  <td>Queso Fresco</td>
+                  <td>QF-2024-008</td>
+                  <td>5 días</td>
+                  <td>45 unidades</td>
+                  <td>8 und/día</td>
+                  <td>
+                    <div class="risk-indicator warning">
+                      <span class="risk-value">0.68</span>
+                      <div class="risk-bar"><div class="risk-fill" style="width: 68%"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-warning">Promoción</span></td>
+                </tr>
+                <tr class="row-info">
+                  <td>Pan Integral</td>
+                  <td>PN-2024-022</td>
+                  <td>6 días</td>
+                  <td>60 unidades</td>
+                  <td>12 und/día</td>
+                  <td>
+                    <div class="risk-indicator info">
+                      <span class="risk-value">0.42</span>
+                      <div class="risk-bar"><div class="risk-fill" style="width: 42%"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-info">Monitorear</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rotacion Screen -->
+      <section id="rotacion-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Rotación de Productos</h1>
+            <p>Priorización de productos a vender</p>
+          </div>
+          <button class="btn btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            Actualizar Prioridades
+          </button>
+        </header>
+        <div class="card info-card">
+          <div class="info-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <h4>Sistema FEFO Activo</h4>
+            <p>Los productos se ordenan automáticamente por fecha de caducidad (First Expired, First Out) y nivel de riesgo calculado.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Cola de Prioridad de Venta</h3>
+            <span class="badge badge-primary">Ordenado por prioridad</span>
+          </div>
+          <div class="card-content">
+            <div class="priority-list">
+              <div class="priority-item priority-1">
+                <div class="priority-number">1</div>
+                <div class="priority-content">
+                  <div class="priority-header">
+                    <h4>Leche Entera 1L</h4>
+                    <span class="badge badge-danger">Prioridad Máxima</span>
+                  </div>
+                  <div class="priority-details">
+                    <span>Lote: LT-2024-001</span>
+                    <span>Stock: 150 unidades</span>
+                    <span>Caduca: 22/03/2024 (2 días)</span>
+                  </div>
+                  <div class="priority-action">
+                    <span class="suggestion">Sugerencia: Aplicar 30% descuento</span>
+                    <button class="btn btn-sm btn-danger">Aplicar Descuento</button>
+                  </div>
+                </div>
+              </div>
+              <div class="priority-item priority-2">
+                <div class="priority-number">2</div>
+                <div class="priority-content">
+                  <div class="priority-header">
+                    <h4>Yogurt Fresa 200g</h4>
+                    <span class="badge badge-danger">Prioridad Máxima</span>
+                  </div>
+                  <div class="priority-details">
+                    <span>Lote: YG-2024-018</span>
+                    <span>Stock: 85 unidades</span>
+                    <span>Caduca: 23/03/2024 (3 días)</span>
+                  </div>
+                  <div class="priority-action">
+                    <span class="suggestion">Sugerencia: Aplicar 25% descuento</span>
+                    <button class="btn btn-sm btn-danger">Aplicar Descuento</button>
+                  </div>
+                </div>
+              </div>
+              <div class="priority-item priority-3">
+                <div class="priority-number">3</div>
+                <div class="priority-content">
+                  <div class="priority-header">
+                    <h4>Queso Fresco 250g</h4>
+                    <span class="badge badge-warning">Prioridad Alta</span>
+                  </div>
+                  <div class="priority-details">
+                    <span>Lote: QF-2024-008</span>
+                    <span>Stock: 45 unidades</span>
+                    <span>Caduca: 25/03/2024 (5 días)</span>
+                  </div>
+                  <div class="priority-action">
+                    <span class="suggestion">Sugerencia: Promoción 2x1</span>
+                    <button class="btn btn-sm btn-warning">Crear Promoción</button>
+                  </div>
+                </div>
+              </div>
+              <div class="priority-item priority-4">
+                <div class="priority-number">4</div>
+                <div class="priority-content">
+                  <div class="priority-header">
+                    <h4>Pan Integral 500g</h4>
+                    <span class="badge badge-info">Prioridad Media</span>
+                  </div>
+                  <div class="priority-details">
+                    <span>Lote: PN-2024-022</span>
+                    <span>Stock: 60 unidades</span>
+                    <span>Caduca: 30/03/2024 (10 días)</span>
+                  </div>
+                  <div class="priority-action">
+                    <span class="suggestion">Sugerencia: Mantener visibilidad</span>
+                    <button class="btn btn-sm btn-outline">Monitorear</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pedidos Screen -->
+      <section id="pedidos-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Estimación de Pedidos</h1>
+            <p>Recomendaciones basadas en demanda histórica</p>
+          </div>
+          <button class="btn btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Recalcular Estimaciones
+          </button>
+        </header>
+        <div class="card info-card success">
+          <div class="info-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <h4>Análisis Predictivo Activo</h4>
+            <p>Las estimaciones se calculan usando el historial de ventas de los últimos 90 días y patrones estacionales.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Recomendaciones de Pedido</h3>
+            <div class="header-actions">
+              <select class="select">
+                <option value="7">Próximos 7 días</option>
+                <option value="14">Próximos 14 días</option>
+                <option value="30">Próximos 30 días</option>
+              </select>
+              <button class="btn btn-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Exportar
+              </button>
+            </div>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Stock Actual</th>
+                  <th>Demanda Est.</th>
+                  <th>Días Cobertura</th>
+                  <th>Cantidad Sugerida</th>
+                  <th>Urgencia</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Pan Blanco 500g</td>
+                  <td>45 unidades</td>
+                  <td>120 und/semana</td>
+                  <td>2.6 días</td>
+                  <td>200 unidades</td>
+                  <td><span class="badge badge-danger">Urgente</span></td>
+                  <td><button class="btn btn-sm btn-primary">Crear Pedido</button></td>
+                </tr>
+                <tr>
+                  <td>Huevos Docena</td>
+                  <td>80 unidades</td>
+                  <td>95 und/semana</td>
+                  <td>5.9 días</td>
+                  <td>150 unidades</td>
+                  <td><span class="badge badge-warning">Pronto</span></td>
+                  <td><button class="btn btn-sm btn-primary">Crear Pedido</button></td>
+                </tr>
+                <tr>
+                  <td>Mantequilla 200g</td>
+                  <td>65 unidades</td>
+                  <td>40 und/semana</td>
+                  <td>11.4 días</td>
+                  <td>80 unidades</td>
+                  <td><span class="badge badge-info">Normal</span></td>
+                  <td><button class="btn btn-sm btn-outline">Programar</button></td>
+                </tr>
+                <tr>
+                  <td>Leche Entera 1L</td>
+                  <td>450 unidades</td>
+                  <td>315 und/semana</td>
+                  <td>10 días</td>
+                  <td>-</td>
+                  <td><span class="badge badge-success">Suficiente</span></td>
+                  <td><span class="text-muted">Sin acción</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reportes Screen -->
+      <section id="reportes-screen" class="content-screen">
+        <header class="content-header">
+          <div>
+            <h1>Reportes y Análisis</h1>
+            <p>Generación de reportes analíticos</p>
+          </div>
+        </header>
+        <div class="reports-grid">
+          <div class="report-card">
+            <div class="report-icon blue">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <h3>Reporte de Ventas</h3>
+            <p>Análisis detallado de ventas por período, producto y categoría</p>
+            <div class="report-options">
+              <select class="select">
+                <option>Última semana</option>
+                <option>Último mes</option>
+                <option>Último trimestre</option>
+              </select>
+              <button class="btn btn-primary btn-full">Generar Reporte</button>
+            </div>
+          </div>
+          <div class="report-card">
+            <div class="report-icon orange">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <h3>Reporte de Mermas</h3>
+            <p>Productos caducados y pérdidas económicas por período</p>
+            <div class="report-options">
+              <select class="select">
+                <option>Última semana</option>
+                <option>Último mes</option>
+                <option>Último trimestre</option>
+              </select>
+              <button class="btn btn-primary btn-full">Generar Reporte</button>
+            </div>
+          </div>
+          <div class="report-card">
+            <div class="report-icon green">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            <h3>Reporte de Rotación</h3>
+            <p>Eficiencia de rotación de inventario y tendencias</p>
+            <div class="report-options">
+              <select class="select">
+                <option>Última semana</option>
+                <option>Último mes</option>
+                <option>Último trimestre</option>
+              </select>
+              <button class="btn btn-primary btn-full">Generar Reporte</button>
+            </div>
+          </div>
+          <div class="report-card">
+            <div class="report-icon purple">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+              </svg>
+            </div>
+            <h3>Reporte de Inventario</h3>
+            <p>Estado actual del inventario, valorización y niveles de stock</p>
+            <div class="report-options">
+              <select class="select">
+                <option>Vista actual</option>
+                <option>Comparativo mensual</option>
+              </select>
+              <button class="btn btn-primary btn-full">Generar Reporte</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Nuevo Producto -->
+  <div id="producto-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nuevo Producto</h2>
+        <button class="modal-close" onclick="closeModal('producto-modal')">&times;</button>
+      </div>
+      <form class="modal-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Código del Producto</label>
+            <input type="text" placeholder="PRD-XXX" required>
+          </div>
+          <div class="form-group">
+            <label>Nombre del Producto</label>
+            <input type="text" placeholder="Nombre del producto" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Categoría</label>
+            <select required>
+              <option value="">Seleccionar categoría</option>
+              <option value="lacteos">Lácteos</option>
+              <option value="panaderia">Panadería</option>
+              <option value="carnes">Carnes</option>
+              <option value="frutas">Frutas y Verduras</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Precio Unitario</label>
+            <input type="number" step="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Stock Mínimo</label>
+            <input type="number" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label>Unidad de Medida</label>
+            <select required>
+              <option value="">Seleccionar unidad</option>
+              <option value="unidad">Unidad</option>
+              <option value="kg">Kilogramo</option>
+              <option value="litro">Litro</option>
+              <option value="paquete">Paquete</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea placeholder="Descripción del producto (opcional)"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal('producto-modal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Nuevo Lote -->
+  <div id="lote-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nuevo Lote</h2>
+        <button class="modal-close" onclick="closeModal('lote-modal')">&times;</button>
+      </div>
+      <form class="modal-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Código del Lote</label>
+            <input type="text" placeholder="LT-YYYY-XXX" required>
+          </div>
+          <div class="form-group">
+            <label>Producto</label>
+            <select required>
+              <option value="">Seleccionar producto</option>
+              <option value="prd-001">PRD-001 - Leche Entera 1L</option>
+              <option value="prd-002">PRD-002 - Yogurt Natural 200g</option>
+              <option value="prd-003">PRD-003 - Pan Blanco 500g</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cantidad</label>
+            <input type="number" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label>Costo Unitario</label>
+            <input type="number" step="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha de Ingreso</label>
+            <input type="date" required>
+          </div>
+          <div class="form-group">
+            <label>Fecha de Caducidad</label>
+            <input type="date" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Proveedor</label>
+          <input type="text" placeholder="Nombre del proveedor">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal('lote-modal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Lote</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Nueva Venta -->
+  <div id="venta-modal" class="modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>Nueva Venta</h2>
+        <button class="modal-close" onclick="closeModal('venta-modal')">&times;</button>
+      </div>
+      <form class="modal-form">
+        <div class="venta-grid">
+          <div class="venta-productos">
+            <h4>Agregar Productos</h4>
+            <div class="search-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Buscar producto...">
+            </div>
+            <div class="producto-quick-list">
+              <button type="button" class="producto-quick-item">
+                <span>Leche Entera 1L</span>
+                <span>$2.50</span>
+              </button>
+              <button type="button" class="producto-quick-item">
+                <span>Yogurt Natural</span>
+                <span>$1.80</span>
+              </button>
+              <button type="button" class="producto-quick-item">
+                <span>Pan Blanco 500g</span>
+                <span>$1.20</span>
+              </button>
+              <button type="button" class="producto-quick-item">
+                <span>Queso Fresco 250g</span>
+                <span>$3.50</span>
+              </button>
+            </div>
+          </div>
+          <div class="venta-carrito">
+            <h4>Carrito de Venta</h4>
+            <div class="carrito-items">
+              <div class="carrito-item">
+                <div class="carrito-info">
+                  <span class="carrito-nombre">Leche Entera 1L</span>
+                  <span class="carrito-precio">$2.50 x 2</span>
+                </div>
+                <div class="carrito-actions">
+                  <span class="carrito-subtotal">$5.00</span>
+                  <button type="button" class="btn-icon danger small">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"/>
+                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="carrito-item">
+                <div class="carrito-info">
+                  <span class="carrito-nombre">Pan Blanco 500g</span>
+                  <span class="carrito-precio">$1.20 x 3</span>
+                </div>
+                <div class="carrito-actions">
+                  <span class="carrito-subtotal">$3.60</span>
+                  <button type="button" class="btn-icon danger small">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"/>
+                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="carrito-total">
+              <span>Total:</span>
+              <span class="total-value">$8.60</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal('venta-modal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Venta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
